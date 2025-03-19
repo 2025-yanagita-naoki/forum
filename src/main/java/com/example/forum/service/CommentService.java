@@ -31,11 +31,14 @@ public class CommentService {
     private Comment setCommentEntity(CommentForm reqComment) {
         Comment comment = new Comment();
         comment.setId(reqComment.getId());
-        comment.setComment(reqComment.getComment());
+        comment.setReportId(reqComment.getReportId());
+        comment.setCommentText(reqComment.getCommentText());
+        comment.setCreateDate(reqComment.getCreateDate());
+        comment.setCreateDate(reqComment.getUpdateDate());
         return comment;
     }
 
-    public List<CommentForm> findAllReport() {
+    public List<CommentForm> findAllComment() {
         List<Comment> results = commentRepository.findAll();
         List<CommentForm> comments = setCommentForm(results);
         return comments;
@@ -50,7 +53,10 @@ public class CommentService {
             CommentForm comment = new CommentForm();
             Comment result = results.get(i);
             comment.setId(result.getId());
-            comment.setComment(result.getComment());
+            comment.setReportId(result.getReportId());
+            comment.setCommentText(result.getCommentText());
+            comment.setCreateDate(result.getCreateDate());
+            comment.setUpdateDate(result.getUpdateDate());
             comments.add(comment);
         }
         return comments;

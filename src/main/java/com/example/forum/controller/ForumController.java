@@ -15,6 +15,7 @@ import java.util.List;
 public class ForumController {
     @Autowired
     ReportService reportService;
+    @Autowired
     CommentService commentService;
 
     /*
@@ -25,10 +26,12 @@ public class ForumController {
         ModelAndView mav = new ModelAndView();
         // 投稿を全件取得
         List<ReportForm> contentData = reportService.findAllReport();
+        List<CommentForm> comment = commentService.findAllComment();
         // 画面遷移先を指定
         mav.setViewName("/top");
         // 投稿データオブジェクトを保管
         mav.addObject("contents", contentData);
+        mav.addObject("comments", comment);
         return mav;
     }
 
@@ -96,19 +99,6 @@ public class ForumController {
         reportService.saveReport(report);
         // rootへリダイレクト
         return new ModelAndView("redirect:/");
-    }
-
-    /*
-     * コメント表示処理
-     */
-    @GetMapping
-    public ModelAndView comment (@PathVariable Integer id, @ModelAttribute("formModel") ReportForm report) {
-        ModelAndView mav = new ModelAndView();
-        List<CommentForm> comment = commentService.findAllReport();
-        mav.setViewName("/top");
-        // コメントデータオブジェクトを保管
-        mav.addObject("comments", comment);
-        return mav;
     }
 
 }

@@ -33,8 +33,21 @@
         </div>
         <div class="comment-area">
             <label>コメント</label>
-            <form method="get" action="/comment" th:object="${comments}">
-                <textarea class="comment-box" name="comment" th:field="*{comment}" size="20" maxlength="200" /></textarea><br/>
+            <div class="comment-icon" th:each="comment : ${comments}">
+                <div th:if="${content.id}==${comment.reportId}">
+                    <div>
+                        ID : <span th:text="${comment.id}"/>
+                    </div>
+                    <div class="text">
+                        コメント : <span th:text="${comment.commentText}"/>
+                    </div>
+                    <a href="/commentEdit">
+                        <button class="new-button" type="button">編集</button>
+                    </a>
+                </div>
+            </div>
+            <form th:method="get" th:action="@{/comment/{id}(id=${content.id})}">
+                <textarea class="comment-box" name="commentText" size="20" maxlength="200" /></textarea><br/>
                 <input type="submit" value="送信"/>
             </form>
         </div>
