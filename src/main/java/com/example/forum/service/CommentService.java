@@ -33,8 +33,8 @@ public class CommentService {
         comment.setId(reqComment.getId());
         comment.setReportId(reqComment.getReportId());
         comment.setCommentText(reqComment.getCommentText());
-        comment.setCreateDate(reqComment.getCreateDate());
-        comment.setCreateDate(reqComment.getUpdateDate());
+        comment.setCreatedDate(reqComment.getCreatedDate());
+        comment.setCreatedDate(reqComment.getUpdatedDate());
         return comment;
     }
 
@@ -55,10 +55,28 @@ public class CommentService {
             comment.setId(result.getId());
             comment.setReportId(result.getReportId());
             comment.setCommentText(result.getCommentText());
-            comment.setCreateDate(result.getCreateDate());
-            comment.setUpdateDate(result.getUpdateDate());
+            comment.setCreatedDate(result.getCreatedDate());
+            comment.setUpdatedDate(result.getUpdatedDate());
             comments.add(comment);
         }
         return comments;
     }
+
+    /*
+     * レコード編集
+     */
+    public CommentForm editComment(Integer id) {
+        List<Comment> results = new ArrayList<>();
+        results.add((Comment) commentRepository.findById(id).orElse(null));
+        List<CommentForm> comments = setCommentForm(results);
+        return comments.get(0);
+    }
+
+    /*
+     * レコード削除
+     */
+    public void deleteComment(Integer id) {
+        commentRepository.deleteById(id);
+    }
+
 }

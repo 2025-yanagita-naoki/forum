@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -17,6 +18,7 @@ public class ForumController {
     ReportService reportService;
     @Autowired
     CommentService commentService;
+
 
     /*
      * 投稿内容表示処理
@@ -32,6 +34,20 @@ public class ForumController {
         // 投稿データオブジェクトを保管
         mav.addObject("contents", contentData);
         mav.addObject("comments", comment);
+        return mav;
+    }
+
+    /*
+     * 投稿内容絞り込み表示
+     */
+    @GetMapping("/date")
+    public ModelAndView getDate(@RequestParam Date startDate, @RequestParam Date endDate) {
+        ModelAndView mav = new ModelAndView();
+        List<ReportForm> contentData = reportService.findDateReport(startDate, endDate);
+        // 画面遷移先を指定
+        mav.setViewName("/top");
+        // 投稿データオブジェクトを保管
+        mav.addObject("contents", contentData);
         return mav;
     }
 
@@ -73,7 +89,7 @@ public class ForumController {
     }
 
     /*
-     * 投稿画面表示処理
+     * 投稿編集画面表示処理
      */
     @GetMapping("/edit/{id}")
     public ModelAndView editContent(@PathVariable Integer id){

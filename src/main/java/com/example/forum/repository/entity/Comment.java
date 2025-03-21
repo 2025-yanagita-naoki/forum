@@ -23,8 +23,8 @@ public class Comment {
     private String commentText;
 
     @Column(name = "create_date")
-    private Date createDate;
+    private Date createdDate;
 
     @Column(name = "update_date")
-    private Date updateDate;
+    private Date updatedDate;
 }

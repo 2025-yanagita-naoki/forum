@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -33,6 +34,8 @@ public class ReportService {
             Report result = results.get(i);
             report.setId(result.getId());
             report.setContent(result.getContent());
+            report.setCreatedDate(result.getCreatedDate());
+            report.setUpdatedDate(result.getUpdatedDate());
             reports.add(report);
         }
         return reports;
@@ -66,11 +69,18 @@ public class ReportService {
     /*
      * レコード編集
      */
-        public ReportForm editReport(Integer id) {
-            List<Report> results = new ArrayList<>();
-            results.add((Report) reportRepository.findById(id).orElse(null));
-            List<ReportForm> reports = setReportForm(results);
-            return reports.get(0);
-        }
+    public ReportForm editReport(Integer id) {
+        List<Report> results = new ArrayList<>();
+        results.add((Report) reportRepository.findById(id).orElse(null));
+        List<ReportForm> reports = setReportForm(results);
+        return reports.get(0);
+
+    }
+
+    public List<ReportForm> findDateReport(Date startDate, Date endDate) {
+        List<Report> results = reportRepository.findByCreatedDateBetween(startDate, endDate);
+        List<ReportForm> reports = setReportForm(results);
+        return reports;
+    }
 }
 

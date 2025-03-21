@@ -5,9 +5,7 @@ import com.example.forum.controller.form.ReportForm;
 import com.example.forum.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
@@ -28,15 +26,43 @@ public class CommentController {
         return new ModelAndView("redirect:/");
     }
 
-    @GetMapping("/commentEdit")
-    public ModelAndView editComment() {
+    /*
+     * コメント編集画面表示処理
+     */
+    @GetMapping("/comEdit/{id}")
+    public ModelAndView editComment(@PathVariable Integer id) {
         ModelAndView mav = new ModelAndView();
-        // form用の空のentityを準備
-        CommentForm commentForm = new CommentForm();
+        // 編集するコメントを取得
+        CommentForm comment = commentService.editComment(id);
         // 画面遷移先を指定
         mav.setViewName("/commentEdit");
         // 準備した空のFormを保管
-        mav.addObject("comments", commentForm);
+        mav.addObject("comments", comment);
         return mav;
     }
+
+    /*
+     * コメント編集処理
+     */
+    @PutMapping("/commentUpdate/{id}")
+    public ModelAndView updateComment (@PathVariable Integer id,@ModelAttribute("comments") CommentForm comment) {
+        // UrlParameterのidを更新するentityにセット
+        comment.setId(id);
+        // 編集した投稿を更新
+        commentService.saveComment(comment);
+        // rootへリダイレクト
+        return new ModelAndView("redirect:/");
+    }
+
+    /*
+     * コメント削除処理
+     */
+    @DeleteMapping("/comDelete/{id}")
+    public ModelAndView deleteComment(@PathVariable Integer id){
+        // 投稿をテーブルに格納
+        commentService.deleteComment(id);
+        // rootへリダイレクト
+        return new ModelAndView("redirect:/");
+    }
+
 }
