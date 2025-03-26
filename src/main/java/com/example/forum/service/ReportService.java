@@ -9,6 +9,7 @@ import org.springframework.util.StringUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -60,8 +61,10 @@ public class ReportService {
         Report report = new Report();
         report.setId(reqReport.getId());
         report.setContent(reqReport.getContent());
-        report.setCreatedDate(reqReport.getCreatedDate());
-        report.setUpdatedDate(reqReport.getUpdatedDate());
+
+        LocalDateTime nowDate = LocalDateTime.now();
+        report.setCreatedDate(nowDate);
+        report.setUpdatedDate(nowDate);
         return report;
     }
 
@@ -101,7 +104,7 @@ public class ReportService {
         }
 
         SimpleDateFormat sdFormat = new SimpleDateFormat("yyyy-MM-dd");
-        Date startFormat;
+        LocalDateTime startFormat;
         try {
             startFormat = sdFormat.parse(start);
         } catch (ParseException e) {
