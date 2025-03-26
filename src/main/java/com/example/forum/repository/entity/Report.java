@@ -3,6 +3,7 @@ package com.example.forum.repository.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
 
 import java.sql.Timestamp;
 import java.util.Date;
@@ -22,6 +23,7 @@ public class Report {
 
     @Column(name = "created_date")
     @Temporal(TemporalType.TIMESTAMP)
+    @CreatedDate
     private Date createdDate;
 
     @Column(name = "updated_date")

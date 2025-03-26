@@ -9,6 +9,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -41,7 +43,7 @@ public class ForumController {
      * 投稿内容絞り込み表示
      */
     @GetMapping("/date")
-    public ModelAndView getDate(@RequestParam Date startDate, @RequestParam Date endDate) {
+    public ModelAndView getDate(@RequestParam(name="startDate") String startDate, @RequestParam(name="endDate") String endDate) {
         ModelAndView mav = new ModelAndView();
         List<ReportForm> contentData = reportService.findDateReport(startDate, endDate);
         // 画面遷移先を指定

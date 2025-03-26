@@ -5,8 +5,12 @@ import com.example.forum.repository.ReportRepository;
 import com.example.forum.repository.entity.Report;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -56,6 +60,8 @@ public class ReportService {
         Report report = new Report();
         report.setId(reqReport.getId());
         report.setContent(reqReport.getContent());
+        report.setCreatedDate(reqReport.getCreatedDate());
+        report.setUpdatedDate(reqReport.getUpdatedDate());
         return report;
     }
 
@@ -71,14 +77,44 @@ public class ReportService {
      */
     public ReportForm editReport(Integer id) {
         List<Report> results = new ArrayList<>();
-        results.add((Report) reportRepository.findById(id).orElse(null));
+        results.add(reportRepository.findById(id).orElse(null));
         List<ReportForm> reports = setReportForm(results);
         return reports.get(0);
 
     }
 
-    public List<ReportForm> findDateReport(Date startDate, Date endDate) {
-        List<Report> results = reportRepository.findByCreatedDateBetween(startDate, endDate);
+    public List<ReportForm> findDateReport(String startDate, String endDate) {
+        String start;
+        String end;
+        if(!StringUtils.isEmpty(startDate)) {
+            start = startDate + " 00:00:00";
+        } else {
+            start = "2020-01-01 00:00:00";
+        }
+
+        if(!StringUtils.isEmpty(endDate)) {
+            end = endDate + " 23:59:59";
+        } else {
+            Calendar cl = Calendar.getInstance();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            end = sdf.format(cl.getTime());
+        }
+
+        SimpleDateFormat sdFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date startFormat;
+        try {
+            startFormat = sdFormat.parse(start);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+        SimpleDateFormat edFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date endFormat;
+        try {
+            endFormat = edFormat.parse(end);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+        List<Report> results = reportRepository.findByCreatedDateBetween(startFormat, endFormat);
         List<ReportForm> reports = setReportForm(results);
         return reports;
     }
